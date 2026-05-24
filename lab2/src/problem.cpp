@@ -8,10 +8,11 @@
 
 using _clock_t = std::chrono::high_resolution_clock;
 
-Problem::Problem(std::vector<Task> &tasks, int num) : p(num), s(p,tasks), t(tasks){
+Problem::Problem(Instance &i, int num) : p(num), s(p,i), instance(i){
 	n = num;
 }
 
+/*
 int Problem::sort_algorithm(bool by_rj) {
   auto start = _clock_t::now();
 	if (by_rj) {
@@ -35,6 +36,7 @@ int Problem::sort_algorithm(bool by_rj) {
 
 	return result;
 }
+*/
 
 int Problem::brute_force() {
   auto start = _clock_t::now();
@@ -60,6 +62,7 @@ int Problem::brute_force() {
   return best_sol;
 }
 
+/*
 int Problem::own_algorithm(){
   auto start = _clock_t::now();
 	int L;
@@ -180,3 +183,4 @@ int Problem::Schrage_preemptive(){
 	
 	return Lmax;
 }
+*/

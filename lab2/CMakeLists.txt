@@ -20,6 +20,7 @@ target_include_directories(Lab2 PRIVATE inc)
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     target_compile_options(Lab2 PRIVATE 
+    -g
     -Wall
     -Wextra
     -pedantic

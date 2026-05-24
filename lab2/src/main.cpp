@@ -1,6 +1,6 @@
 #include "import_tools.hh"
 #include "dataTypes.hh"
-//#include "problem.hh"
+#include "problem.hh"
 #include <iostream>
 #include <sstream>
 #include <vector>
@@ -10,8 +10,10 @@ int main(int argc, char *argv[]) {
     std::ostringstream dane;
     std::string file(argv[1]);
     importData(file, dane);
-    Instance *n = parse_dataset(dane);
-    n->print();
+    Instance *i = parse_dataset(dane);
+    i->print();
+    Problem problem(*i, i->n);
+    problem.brute_force();
     /*
     std::vector<Task> tasks;
     if(argc < 3){
@@ -21,7 +23,6 @@ int main(int argc, char *argv[]) {
     //std::cout << "N: " << n << std::endl;
     //Permutation p(n);
     //solution s(p, tasks);
-    Problem problem(tasks, n);
     if(!strcmp(argv[2], "own")) {
     	problem.own_algorithm();
     } else if (!strcmp(argv[2], "brute")) {

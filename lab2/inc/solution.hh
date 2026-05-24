@@ -12,14 +12,7 @@ class Solution {
   std::vector<std::vector<int>> c;
 public:
   int solve();
-  Solution(Permutation &perm, Instance &instance) : p(perm), i(instance)
-  {
-    c.resize(i.m+1);
-    for(int n=0; n<(i.n+1); n++){
-      c[n].resize(i.n);
-      std::fill(c[n].begin(), c[n].end(), 0);
-    }
-  };
+  Solution(Permutation &perm, Instance &instance) : p(perm), i(instance), c(instance.m + 1, std::vector<int>(instance.n+1, 0)){};
 };
 
 #endif // SOLUTION_HH
