@@ -62,24 +62,35 @@ int Problem::brute_force() {
   return best_sol;
 }
 
+<<<<<<< Updated upstream:lab2/src/problem.cpp
 /*
 int Problem::own_algorithm(){
   auto start = _clock_t::now();
 	int L;
+=======
+void Problem::NEH(Solution &init_sol) {
+  int C_max = INT_MAX;
+  Solution s0;
+  int idx;
+>>>>>>> Stashed changes:lab2/src/problem.cpp.old
 
-	for(int i = 0; i < n-1; ++i) {
-		L = s.solve();
-		iter_swap(p.perm.begin()+i, p.perm.begin()+i+1);
-		if(s.solve() > L) 
-			iter_swap(p.perm.begin()+i, p.perm.begin()+i+1);
-	}
-  int result = s.solve();
-  auto end = _clock_t::now();
-  //std::cout << "t = ";
-  std::cout << result << "\t";
-  std::cout << std::chrono::duration_cast<std::chrono::microseconds>(end -
-                                                           start).count() << "\t";
-	return result;
+  for (int j = 0; j < init_sol.n; j++) {
+    int task_id = init_sol.p[j];
+    C_max = INT_MAX;
+    for (int k = 0; k <= j ; k++) {
+      Solution temp = s0;
+      auto it = temp.p.perm.begin() + k;
+      temp.p.perm.insert(it, task_id);
+      int c = temp.solve();
+
+      if (c < C_max) {
+        C_max = c;
+        idx = k;
+      }
+    }
+    auto it = s0.p.perm.begin() + idx;
+    s0.p.perm.insert(it, task_id);
+  }
 }
 
 int Problem::Schrage(){
