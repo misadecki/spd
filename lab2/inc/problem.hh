@@ -4,6 +4,7 @@
 #include "Permutation.hh"
 #include "solution.hh"
 #include "dataTypes.hh"
+#include <list>
 
 class Problem {
   Permutation p; 
@@ -11,19 +12,10 @@ class Problem {
   int n;
   Instance &instance;
 public:
-  //int sort_algorithm(bool by_rj = false);
-  int brute_force();
-<<<<<<< Updated upstream:lab2/inc/problem.hh
-  //int own_algorithm();
-  //int Schrage();
-  //int Schrage_preemptive();
   Problem(Instance &i, int num);
-=======
-  void NEH(Solution &init_sol);
-  int Schrage();
-  int Schrage_preemptive();
-  Problem(std::vector<Task> &tasks, int num);
->>>>>>> Stashed changes:lab2/inc/problem.hh.old
+  int brute_force();
+  int NEH();
+  int johnson();
 };
 
 #endif // PROBLEM_HH

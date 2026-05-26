@@ -5,38 +5,13 @@
 #include <algorithm>
 #include <queue>
 #include <chrono>
+#include <list>
 
 using _clock_t = std::chrono::high_resolution_clock;
 
 Problem::Problem(Instance &i, int num) : p(num), s(p,i), instance(i){
 	n = num;
 }
-
-/*
-int Problem::sort_algorithm(bool by_rj) {
-  auto start = _clock_t::now();
-	if (by_rj) {
-    std::sort(p.perm.begin(), p.perm.end(), [&](const int a, const int b) {
-    return t[a].rj < t[b].rj;
-    });
-    //std::cout << p << std::endl;
-	} else {
-    std::sort(p.perm.begin(), p.perm.end(), [&](const int a, const int b) {
-    return t[a].dj < t[b].dj;
-    });
-	}
-  int result = s.solve();
-  auto end = _clock_t::now();
-  std::string param = "by_dj): ";
-  if (by_rj) param = "by_rj): ";
-  //std::cout << "t(" << param;
-  std::cout << result << "\t";
-  std::cout << std::chrono::duration_cast<std::chrono::microseconds>(end -
-                                                           start).count() << "\t";
-
-	return result;
-}
-*/
 
 int Problem::brute_force() {
   auto start = _clock_t::now();
@@ -62,136 +37,68 @@ int Problem::brute_force() {
   return best_sol;
 }
 
-<<<<<<< Updated upstream:lab2/src/problem.cpp
-/*
-int Problem::own_algorithm(){
-  auto start = _clock_t::now();
-	int L;
-=======
-void Problem::NEH(Solution &init_sol) {
+int Problem::NEH() {
   int C_max = INT_MAX;
-  Solution s0;
   int idx;
->>>>>>> Stashed changes:lab2/src/problem.cpp.old
 
-  for (int j = 0; j < init_sol.n; j++) {
-    int task_id = init_sol.p[j];
+  auto start = _clock_t::now();
+  for (int j = 0; j < p.get_n(); j++) {
+    int task_id = p[j];
     C_max = INT_MAX;
     for (int k = 0; k <= j ; k++) {
-      Solution temp = s0;
-      auto it = temp.p.perm.begin() + k;
-      temp.p.perm.insert(it, task_id);
-      int c = temp.solve();
+      auto it = p.perm.begin() + k;
+      p.perm.insert(it, task_id);
+      int c = s.solve();
 
       if (c < C_max) {
         C_max = c;
         idx = k;
       }
     }
-    auto it = s0.p.perm.begin() + idx;
-    s0.p.perm.insert(it, task_id);
+    auto it = p.perm.begin() + idx;
+    p.perm.insert(it, task_id);
   }
-}
 
-int Problem::Schrage(){
-  auto start = _clock_t::now();
-	auto compare = [this](int a, int b) {
-		return t[a].dj > t[b].dj;
-	};
-	std::priority_queue all_tasks(p.perm.begin(), p.perm.end(), [&](const int a, const int b) {
-		return t[a].rj > t[b].rj;
-	});
-	std::priority_queue<int, std::vector<int>, decltype(compare)> available(compare);
-	
-	int Lmax = INT_MIN;
-	int time = 0;
-	int temp_task;
-	int current_task;
-	bool last_flag = false;
-
-	if(!all_tasks.empty()){
-		temp_task = all_tasks.top();
-		all_tasks.pop();
-		time = std::max(time, t[temp_task].rj);
-	}
-	while(!all_tasks.empty() || !available.empty()) {
-		while(t[temp_task].rj <= time && !last_flag) {
-			available.push(temp_task);
-			if(!all_tasks.empty()){
-				temp_task = all_tasks.top();
-				all_tasks.pop();
-			} else {
-				last_flag = true;	
-			}
-		}
-		current_task = available.top();
-		available.pop();
-		time += t[current_task].pj;
-		Lmax = std::max(Lmax, time - t[current_task].dj);
-		//std::cout << "Task: " << current_task << "; L = " << time - t[current_task].dj << std::endl;
-		if(t[temp_task].rj > time && available.empty())
-			time = std::max(time, t[temp_task].rj);
-	}
+  std::cout << C_max << "\t";
+  //std::cout << p << std::endl;
   auto end = _clock_t::now();
-  std::cout << Lmax << "\t";
+  //std::cout << "t = ";
   std::cout << std::chrono::duration_cast<std::chrono::microseconds>(end -
                                                            start).count() << "\t";
-	return Lmax;
+
+  return C_max;
 }
 
-int Problem::Schrage_preemptive(){
+int Problem::johnson() {
   auto start = _clock_t::now();
-	auto compare = [this](int a, int b) {
-		return t[a].dj > t[b].dj;	// Czy tutaj dodać
-						// porównawanie pj?
-	};
-	std::priority_queue all_tasks(p.perm.begin(), p.perm.end(), [&](const int a, const int b) {
-		return t[a].rj > t[b].rj;
-	});
-	std::priority_queue<int, std::vector<int>, decltype(compare)> available(compare);
-	
-	int Lmax = INT_MIN;
-	int time = 0;
-	int temp_task;
-	int current_task;
-	bool last_flag = false;
-
-	if(!all_tasks.empty()){
-		temp_task = all_tasks.top();
-		all_tasks.pop();
-		time = std::max(time, t[temp_task].rj);
+	if(instance.m != 2) return INT_MAX;
+	std::list<int> g1 = {}, g2 = {};
+	for(int idx=0; idx<instance.n; idx++){
+		if(instance[idx][0]<instance[idx][1])
+			g1.push_back(idx);
+		else
+			g2.push_back(idx);
 	}
-	while(!all_tasks.empty() || !available.empty()) {
-		while(t[temp_task].rj <= time && !last_flag) {
-			available.push(temp_task);
-			if(!all_tasks.empty()){
-				temp_task = all_tasks.top();
-				all_tasks.pop();
-			} else {
-				last_flag = true;	
-			}
-		}
-		current_task = available.top();
-		if(t[temp_task].rj < (time + t[current_task].pj) && !last_flag){
-			t[current_task].pj = t[current_task].pj - (t[temp_task].rj - time);
-			time = t[temp_task].rj;
-			//std::cout << "wywlaszylem taska" << std::endl;
-		} else {
-			time += t[current_task].pj;
-			Lmax = std::max(Lmax, time - t[current_task].dj);
-			available.pop();
-			//std::cout << "Task: " << current_task << "; L = " << time - t[current_task].dj <<std::endl;
-		}
-		if(t[temp_task].rj > time && available.empty())
-			time = std::max(time, t[temp_task].rj);
-	}
-
-
+	// sort g1 niemalejąco
+	g1.sort([&](int a, int b){
+			return instance[a][0] < instance[b][0];
+			});
+	// sort g2 nierosnąco
+	g2.sort([&](int a, int b){
+			return instance[a][1] >= instance[b][1];
+			});
+	// kolejnosc g1,g2
+	g1.splice(g1.end(), g2);
+	std::cout << "Lista 1: ";
+	for (auto v : g1)
+        	std::cout << v << "\n";
+	int best_sol = s.solve(g1);
+  std::cout << best_sol << "\t";
+  //std::cout << p << std::endl;
   auto end = _clock_t::now();
-  std::cout << Lmax << "\t";
+  //std::cout << "t = ";
   std::cout << std::chrono::duration_cast<std::chrono::microseconds>(end -
                                                            start).count() << "\t";
-	
-	return Lmax;
+
+  return best_sol;
 }
-*/

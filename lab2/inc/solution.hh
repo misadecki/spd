@@ -4,6 +4,7 @@
 #include "dataTypes.hh"
 #include "Permutation.hh"
 #include <algorithm>
+#include <list>
 
 class Solution {
   //int current_L = 0;
@@ -12,6 +13,7 @@ class Solution {
   std::vector<std::vector<int>> c;
 public:
   int solve();
+  int solve(std::list<int> &task_list);
   Solution(Permutation &perm, Instance &instance) : p(perm), i(instance), c(instance.m + 1, std::vector<int>(instance.n+1, 0)){};
 };
 

@@ -13,30 +13,25 @@ int main(int argc, char *argv[]) {
     Instance *i = parse_dataset(dane);
     i->print();
     Problem problem(*i, i->n);
-    problem.brute_force();
-    /*
-    std::vector<Task> tasks;
+
     if(argc < 3){
-	    std::cout << "Usage: " << argv[0] << " <plik_testowy>" << " <own|brute|sort_dj|sort_rj|schrage|p_schrage>"<< std::endl;
+	    std::cout << "Usage: " << argv[0] << " <plik_testowy>" << " <_ |brute|johnson|neh| _ | _>"<< std::endl;
 	    return 0;
     }
-    //std::cout << "N: " << n << std::endl;
-    //Permutation p(n);
-    //solution s(p, tasks);
     if(!strcmp(argv[2], "own")) {
-    	problem.own_algorithm();
+    	//problem.own_algorithm();
     } else if (!strcmp(argv[2], "brute")) {
     	problem.brute_force();
-    } else if (!strcmp(argv[2], "sort_dj")) {
-    	problem.sort_algorithm();
-    } else if (!strcmp(argv[2], "sort_rj")) {
-    	problem.sort_algorithm(true);
+    } else if (!strcmp(argv[2], "johnson")) {
+    	problem.johnson();
+    } else if (!strcmp(argv[2], "neh")) {
+	problem.NEH();
     } else if (!strcmp(argv[2], "schrage")) {
-    	problem.Schrage();
+   	//problem.Schrage();
     } else if (!strcmp(argv[2], "p_schrage")) {
-    	problem.Schrage_preemptive();
+    	//problem.Schrage_preemptive();
     }
     std::cout << argv[1] << std::endl;
-    */
+
     return 0;
 }
