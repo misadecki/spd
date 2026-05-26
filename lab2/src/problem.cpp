@@ -40,24 +40,38 @@ int Problem::brute_force() {
 int Problem::NEH() {
   int C_max = INT_MAX;
   int idx;
+  std::vector<int> pi;
+  //pi.resize(p.get_n());
 
   auto start = _clock_t::now();
   for (int j = 0; j < p.get_n(); j++) {
     int task_id = p[j];
     C_max = INT_MAX;
     for (int k = 0; k <= j ; k++) {
-      auto it = p.perm.begin() + k;
-      p.perm.insert(it, task_id);
-      int c = s.solve();
+      auto it = pi.begin() + k;
+      pi.insert(it, task_id);
+      int c = s.solve(pi);
 
+  std::cout << "PI: ";
+  for(auto element : pi)
+	  std::cout << element << " ";
+  std::cout << std::endl;
+  std::cout << c << std::endl;
       if (c < C_max) {
         C_max = c;
         idx = k;
       }
+      pi.erase(pi.begin()+k);
     }
-    auto it = p.perm.begin() + idx;
-    p.perm.insert(it, task_id);
+    auto it = pi.begin() + idx;
+    pi.insert(it, task_id);
   }
+  std::cout << "PI: ";
+  for(auto element : pi)
+	  std::cout << element << " ";
+  std::cout << std::endl;
+
+  C_max = s.solve(pi);
 
   std::cout << C_max << "\t";
   //std::cout << p << std::endl;

@@ -20,3 +20,12 @@ int Solution::solve(std::list<int> &task_list) {
 
   return c[i.m][i.n];
 }
+
+int Solution::solve(std::vector<int> &v) {
+  for (int a=1; a<=(i.m); a++){
+	 for(int b=1; b<=(v.size()); b++)
+		c[a][b] = std::max(c[a][b-1], c[a-1][b]) + i[v[b-1]][a-1];
+  }
+
+  return c[i.m][v.size()];
+}

@@ -5,6 +5,7 @@
 #include "Permutation.hh"
 #include <algorithm>
 #include <list>
+#include <vector>
 
 class Solution {
   //int current_L = 0;
@@ -14,6 +15,7 @@ class Solution {
 public:
   int solve();
   int solve(std::list<int> &task_list);
+  int solve(std::vector<int> &v);
   Solution(Permutation &perm, Instance &instance) : p(perm), i(instance), c(instance.m + 1, std::vector<int>(instance.n+1, 0)){};
 };
 
