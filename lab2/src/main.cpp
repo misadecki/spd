@@ -8,7 +8,7 @@
 
 int main(int argc, char *argv[]) {
     if(argc < 3){
-	    std::cout << "Usage: " << argv[0] << " <plik_testowy>" << " <brute|johnson|neh|fneh|binary>"<< std::endl;
+	    std::cout << "Usage: " << argv[0] << " <plik_testowy>" << " <brute|johnson|neh|fneh|bnb>"<< std::endl;
 	    return 0;
     }
     std::ostringstream dane;
@@ -26,8 +26,8 @@ int main(int argc, char *argv[]) {
 	problem.NEH();
     } else if (!strcmp(argv[2], "fneh")) {
    	problem.FNEH();
-    } else if (!strcmp(argv[2], "binary")) {
-    	//problem.Schrage_preemptive();
+    } else if (!strcmp(argv[2], "bnb")) {
+    	problem.branch_and_bound();
     }
     std::cout << argv[1] << std::endl;
 
