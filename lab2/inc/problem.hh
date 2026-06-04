@@ -15,12 +15,13 @@ public:
   Problem(Instance &i, int num);
   int brute_force();
   int NEH();
+  int FNEH();
   int johnson();
 };
 
-typedef struct {
-	int e;	// earliest end time before new task
-	int q;	// latest start time after task 
-} FNEHNode;
+struct FNEHNode{
+	int e = 0;	// earliest end time before new task
+	int q = 0;	// latest start time after task
+};
 
 #endif // PROBLEM_HH
