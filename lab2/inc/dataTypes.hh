@@ -34,14 +34,15 @@ struct Instance {
   }
 
   void print() {
-    std::cout << "Number of tasks: " << n << std::endl;
-    std::cout << "Number of operations: " << m << std::endl;
-    for (int i = 0; i < n; ++i){
-      std::cout << "Task " << i << ": ";
-      for (int j = 0; j < m; ++j)
-        std::cout << j << "(" << tasks[i][j] << ") ";
-      std::cout << std::endl;
-    } 
+	  std::cout << n << "\t" << m << "\t";
+    //std::cout << "Number of tasks: " << n << std::endl;
+    //std::cout << "Number of operations: " << m << std::endl;
+    //for (int i = 0; i < n; ++i){
+      //std::cout << "Task " << i << ": ";
+      //for (int j = 0; j < m; ++j)
+        //std::cout << j << "(" << tasks[i][j] << ") ";
+      //std::cout << std::endl;
+    //} 
   }
 };
 

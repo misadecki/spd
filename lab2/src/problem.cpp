@@ -25,10 +25,8 @@ int Problem::brute_force() {
   } while(p.next_perm());
 
   p.perm = best_perm;
-  std::cout << best_sol << "\t";
-  //std::cout << p << std::endl;
   auto end = _clock_t::now();
-  //std::cout << "t = ";
+  std::cout << best_sol << "\t";
   std::cout << std::chrono::duration_cast<std::chrono::microseconds>(end -
                                                            start).count() << "\t";
 
@@ -59,15 +57,10 @@ int Problem::NEH() {
     auto it = pi.begin() + idx;
     pi.insert(it, task_id);
   }
-  std::cout << "PI: ";
-  for(auto element : pi)
-	  std::cout << element << " ";
-  std::cout << std::endl;
-
   C_max = s.solve(pi);
 
-  std::cout << C_max << "\t";
   auto end = _clock_t::now();
+  std::cout << C_max << "\t";
   std::cout << std::chrono::duration_cast<std::chrono::microseconds>(end -
                                                            start).count() << "\t";
 
@@ -131,11 +124,6 @@ int Problem::FNEH(int print_result) {
 
   }
 
-  std::cout << "PI: ";
-  for(auto element : pi)
-	  std::cout << element << " ";
-  std::cout << std::endl;
-
   C_max = s.solve(pi);
 
   auto end = _clock_t::now();
@@ -168,14 +156,9 @@ int Problem::johnson() {
 			});
 	// kolejnosc g1,g2
 	g1.splice(g1.end(), g2);
-	std::cout << "Lista 1: ";
-	for (auto v : g1)
-        	std::cout << v << "\n";
 	int best_sol = s.solve(g1);
-  std::cout << best_sol << "\t";
-  //std::cout << p << std::endl;
   auto end = _clock_t::now();
-  //std::cout << "t = ";
+  std::cout << best_sol << "\t";
   std::cout << std::chrono::duration_cast<std::chrono::microseconds>(end -
                                                            start).count() << "\t";
 
@@ -194,8 +177,8 @@ int Problem::branch_and_bound() {
 
   bnb_recur(sigma, tasks, best_sol, best_perm);
 
-  std::cout << best_sol << "\t";
   auto end = _clock_t::now();
+  std::cout << best_sol << "\t";
   std::cout << std::chrono::duration_cast<std::chrono::microseconds>(end -
                                                            start).count() << "\t";
   return best_sol;
@@ -203,14 +186,13 @@ int Problem::branch_and_bound() {
 
 void Problem::bnb_recur(std::vector<int> &sigma, std::vector<int> &tasks, int &best_sol,
                  std::vector<int> &best_perm) {
-  int lb = 0;
   if (tasks.empty()) {
     int cmax = s.solve(sigma);
     if (cmax < best_sol) {
       best_sol = cmax;
       best_perm = sigma;
-      return;
     }
+    return;
   }
 
   for (size_t idx = 0; idx < tasks.size(); ++idx) {
@@ -221,8 +203,8 @@ void Problem::bnb_recur(std::vector<int> &sigma, std::vector<int> &tasks, int &b
     int lb_max = INT_MIN;
 
     for (int k = 0; k < instance.m; ++k) {
-      lb += s.solve(sigma, k);
-      int min = INT_MAX;
+      int lb = s.solve(sigma, k+1);
+      int min = (tasks.empty()) ? 0 : INT_MAX;
 
       for (size_t i = 0; i < tasks.size(); ++i) {
         lb += instance[tasks[i]][k];
@@ -235,9 +217,12 @@ void Problem::bnb_recur(std::vector<int> &sigma, std::vector<int> &tasks, int &b
           min = temp;
         }
       }
-      lb += min;
 
-      if (lb_max < lb) {
+      if(!tasks.empty()){
+        lb += min;
+      }
+
+      if (lb > lb_max) {
         lb_max = lb;
       }
     }

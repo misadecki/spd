@@ -15,7 +15,7 @@ int main(int argc, char *argv[]) {
     std::string file(argv[1]);
     importData(file, dane);
     Instance *i = parse_dataset(dane);
-    i->print();
+    //i->print();
     Problem problem(*i, i->n);
 
     if (!strcmp(argv[2], "brute")) {
