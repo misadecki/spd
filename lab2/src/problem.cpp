@@ -185,10 +185,15 @@ int Problem::johnson() {
 }
 
 int Problem::branch_and_bound() {
-  int best_sol = NEH(), cmax = 0;
+  int best_sol = FNEH(), cmax = 0;
   std::vector<int> sigma, best_perm;
 
-  bnb_recur(sigma, instance.tasks, best_sol, best_perm);
+  std::vector<std::vector<int>> tasks(instance.n);
+  for(int idx=0; idx<instance.n; ++idx){
+	  tasks[idx].assign(instance.tasks[idx], instance.tasks[idx] + instance.m);
+  }
+
+  bnb_recur(sigma, tasks, best_sol, best_perm);
 
   return best_sol;
 }
