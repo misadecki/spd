@@ -185,8 +185,8 @@ int Problem::johnson() {
 }
 
 int Problem::branch_and_bound() {
-  auto start = _clock_t::now();
   int best_sol = FNEH();
+  auto start = _clock_t::now();
   std::vector<int> sigma, best_perm;
   std::vector<int> tasks(instance.n);
 
@@ -214,32 +214,40 @@ void Problem::bnb_recur(std::vector<int> &sigma, std::vector<int> &tasks, int &b
     }
   }
 
-  sigma.push_back(tasks[0]);
-  tasks.erase(tasks.begin());
+  for (size_t idx = 0; idx < tasks.size(); ++idx) {
+    int curr_task = tasks[idx];
+    sigma.push_back(curr_task);
+    tasks.erase(tasks.begin() + idx);
 
-  int lb_max = INT_MIN;
-  for (int k = 0; k < instance.m; ++k) {
-    lb += s.solve(sigma, k);
-    int min = INT_MAX;
-    for (size_t i = 0; i < tasks.size(); ++i) {
-      lb += instance[tasks[i]][k];
-      int temp = 0;
-      for (int j = k + 1; j < instance.m; ++j) {
-        temp += instance[tasks[i]][j];
+    int lb_max = INT_MIN;
+
+    for (int k = 0; k < instance.m; ++k) {
+      lb += s.solve(sigma, k);
+      int min = INT_MAX;
+
+      for (size_t i = 0; i < tasks.size(); ++i) {
+        lb += instance[tasks[i]][k];
+        int temp = 0;
+
+        for (int j = k + 1; j < instance.m; ++j) {
+          temp += instance[tasks[i]][j];
+        }
+        if (temp < min) {
+          min = temp;
+        }
       }
-      if (temp < min) {
-        min = temp;
+      lb += min;
+
+      if (lb_max < lb) {
+        lb_max = lb;
       }
     }
-    lb += min;
-    if (lb_max < lb) {
-      lb_max = lb;
-    }
-  }
 
-  if (lb_max < best_sol) {
-    bnb_recur(sigma, tasks, best_sol, best_perm);
-    tasks.insert(tasks.begin(), sigma.at(sigma.size() - 1));
+    if (lb_max < best_sol) {
+      bnb_recur(sigma, tasks, best_sol, best_perm);
+    }
+
+    tasks.insert(tasks.begin() + idx, curr_task);
     sigma.pop_back();
   }
 }
