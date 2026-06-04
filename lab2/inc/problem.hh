@@ -10,7 +10,7 @@ class Problem {
   Solution s;
   int n;
   Instance &instance;
-  void bnb_recur(std::vector<int> &sigma, std::vector<int>& tasks, int &best_sol,
+  void bnb_recur(std::vector<int> &sigma, std::vector<int> &tasks, int &best_sol,
                  std::vector<int> &best_perm);
 public:
   Problem(Instance &i, int num);
