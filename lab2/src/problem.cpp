@@ -52,11 +52,6 @@ int Problem::NEH() {
       pi.insert(it, task_id);
       int c = s.solve(pi);
 
-  std::cout << "PI: ";
-  for(auto element : pi)
-	  std::cout << element << " ";
-  std::cout << std::endl;
-  std::cout << c << std::endl;
       if (c < C_max) {
         C_max = c;
         idx = k;
@@ -66,6 +61,80 @@ int Problem::NEH() {
     auto it = pi.begin() + idx;
     pi.insert(it, task_id);
   }
+  std::cout << "PI: ";
+  for(auto element : pi)
+	  std::cout << element << " ";
+  std::cout << std::endl;
+
+  C_max = s.solve(pi);
+
+  std::cout << C_max << "\t";
+  //std::cout << p << std::endl;
+  auto end = _clock_t::now();
+  //std::cout << "t = ";
+  std::cout << std::chrono::duration_cast<std::chrono::microseconds>(end -
+                                                           start).count() << "\t";
+
+  return C_max;
+}
+
+int Problem::FNEH() {
+  int C_max = INT_MAX;
+  int idx;
+
+  std::vector<std::vector<FNEHNode>> matrix;
+  std::vector<int> temp(instance.m);
+
+  std::vector<int> pi;
+  //pi.resize(p.get_n());
+
+  auto start = _clock_t::now();
+  for (int j = 0; j < p.get_n(); j++) {
+    int task_id = p[j];
+    C_max = INT_MAX;
+    for (int k = 0; k <= j ; k++) {
+      int c = INT_MIN;
+      temp[0] = ((k-1>=0) ? matrix[k-1][0].e : 0) + instance[task_id][0];
+      if(temp[0] + ((k<j) ? matrix[k][0].q : 0) > c)
+        c = temp[0] + ((k<j) ? matrix[k][0].q : 0);
+      for(int i=1; i<instance.m; ++i){
+        temp[i] = std::max(
+			(k-1>=0) ? matrix[k-1][i].e : 0,
+			temp[i-1]
+			) + instance[task_id][i];
+
+      if(temp[i] + ((k<j) ? matrix[k][i].q : 0) > c)
+        c = temp[i] + ((k<j) ? matrix[k][i].q : 0);
+      }
+      if(c < C_max) {
+        C_max = c;
+        idx = k;
+      }
+    }
+
+    auto it = pi.begin() + idx;
+    pi.insert(it, task_id);
+    auto it_matrix = matrix.begin() + idx;
+    matrix.insert(it_matrix, std::vector<FNEHNode>(instance.m));
+    for(int i=idx; i>=0; --i){
+      for(int m_id=instance.m-1; m_id>=0; --m_id){
+        matrix[i][m_id].q = std::max(
+			  (i+1<=j) ? matrix[i+1][m_id].q : 0,
+			  (m_id+1<instance.m) ? matrix[i][m_id+1].q : 0
+			  ) + instance[pi[i]][m_id];
+      }
+    }
+    for(int i=idx; i<=j; ++i){
+      for(int m_id=0; m_id<instance.m; ++m_id){
+        matrix[i][m_id].e = std::max(
+			  (i-1>=0) ? matrix[i-1][m_id].e : 0,
+			  (m_id-1>=0) ? matrix[i][m_id-1].e : 0
+			  ) + instance[pi[i]][m_id];
+      }
+    }
+
+  }
+
   std::cout << "PI: ";
   for(auto element : pi)
 	  std::cout << element << " ";
