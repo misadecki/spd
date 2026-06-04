@@ -18,4 +18,9 @@ public:
   int johnson();
 };
 
+typedef struct {
+	int e;	// earliest end time before new task
+	int q;	// latest start time after task 
+} FNEHNode;
+
 #endif // PROBLEM_HH
