@@ -185,6 +185,7 @@ int Problem::johnson() {
 }
 
 int Problem::branch_and_bound() {
+  auto start = _clock_t::now();
   int best_sol = FNEH();
   std::vector<int> sigma, best_perm;
   std::vector<int> tasks(instance.n);
@@ -195,6 +196,9 @@ int Problem::branch_and_bound() {
 
   bnb_recur(sigma, tasks, best_sol, best_perm);
 
+  auto end = _clock_t::now();
+  std::cout << std::chrono::duration_cast<std::chrono::microseconds>(end -
+                                                           start).count() << "\t";
   return best_sol;
 }
 
