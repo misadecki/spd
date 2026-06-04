@@ -4,9 +4,8 @@ INPUT_FILE="tail.dat"
 OUTPUT_DIR="data"
 if [ -d "$OUTPUT_DIR" ]; then
 	rm -r "$OUTPUT_DIR" 
-else
-	mkdir -p "$OUTPUT_DIR"
 fi
+mkdir -p "$OUTPUT_DIR"
 
 
 if [ ! -f "$INPUT_FILE" ]; then
@@ -38,7 +37,7 @@ for ((task_num=1; task_num<=TOTAL_TASKS; task_num++)); do
 	echo "$HEADER_LINE" > "$OUTPUT_FILE"
 	for ((task=1; task<=NUM_OPERATIONS; task++)); do
 		if read -u 3 -r RAW_TASK_LINE; then
-			TASK_LINE=$(echo "$RAW_OP_LINE" | tr -d '\r')
+			TASK_LINE=$(echo "$RAW_TASK_LINE" | tr -d '\r')
 			echo "$TASK_LINE" >> "$OUTPUT_FILE"
 		else
 			echo "Błąd: Brak danych dla zadania $task w instancji $task_num."
