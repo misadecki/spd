@@ -16,7 +16,7 @@ public:
   Problem(Instance &i, int num);
   int brute_force();
   int NEH();
-  int FNEH();
+  int FNEH(int print_result = 1);
   int johnson();
   int branch_and_bound();
 };

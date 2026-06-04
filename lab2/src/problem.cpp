@@ -67,16 +67,14 @@ int Problem::NEH() {
   C_max = s.solve(pi);
 
   std::cout << C_max << "\t";
-  //std::cout << p << std::endl;
   auto end = _clock_t::now();
-  //std::cout << "t = ";
   std::cout << std::chrono::duration_cast<std::chrono::microseconds>(end -
                                                            start).count() << "\t";
 
   return C_max;
 }
 
-int Problem::FNEH() {
+int Problem::FNEH(int print_result) {
   int C_max = INT_MAX;
   int idx;
 
@@ -140,12 +138,12 @@ int Problem::FNEH() {
 
   C_max = s.solve(pi);
 
-  std::cout << C_max << "\t";
-  //std::cout << p << std::endl;
   auto end = _clock_t::now();
-  //std::cout << "t = ";
-  std::cout << std::chrono::duration_cast<std::chrono::microseconds>(end -
+  if(print_result){
+    std::cout << C_max << "\t";
+    std::cout << std::chrono::duration_cast<std::chrono::microseconds>(end -
                                                            start).count() << "\t";
+  }
 
   return C_max;
 }
@@ -185,8 +183,8 @@ int Problem::johnson() {
 }
 
 int Problem::branch_and_bound() {
-  int best_sol = FNEH();
   auto start = _clock_t::now();
+  int best_sol = FNEH(0);
   std::vector<int> sigma, best_perm;
   std::vector<int> tasks(instance.n);
 
@@ -196,6 +194,7 @@ int Problem::branch_and_bound() {
 
   bnb_recur(sigma, tasks, best_sol, best_perm);
 
+  std::cout << best_sol << "\t";
   auto end = _clock_t::now();
   std::cout << std::chrono::duration_cast<std::chrono::microseconds>(end -
                                                            start).count() << "\t";
