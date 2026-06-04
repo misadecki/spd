@@ -2,8 +2,6 @@
 #include "Permutation.hh"
 #include <climits>
 #include <iostream>
-#include <algorithm>
-#include <queue>
 #include <chrono>
 #include <list>
 
@@ -184,4 +182,40 @@ int Problem::johnson() {
                                                            start).count() << "\t";
 
   return best_sol;
+}
+
+int Problem::branch_and_bound() {
+  int best_sol = NEH(), cmax = 0;
+  std::vector<int> sigma, best_perm;
+
+  bnb_recur(sigma, instance.tasks, best_sol, best_perm);
+
+  return best_sol;
+}
+
+void Problem::bnb_recur(std::vector<int> &sigma, std::vector<int>& tasks, int &best_sol,
+                 std::vector<int> &best_perm) {
+  int lb = 0;
+  if (tasks.empty()) {
+    int cmax = s.solve(sigma);
+    if (cmax < best_sol) {
+      best_sol = cmax;
+      best_perm = sigma;
+      return;
+    }
+  }
+
+  for (size_t i = 0; i < tasks.size(); ++i) {
+    int task = tasks[i];
+    sigma.push_back(task);
+    lb += 1;
+
+    if (lb < best_sol) {
+      tasks.erase(tasks.begin() + i);
+      bnb_recur(sigma, tasks, best_sol, best_perm);
+      tasks.insert(tasks.begin() + i, task);
+    }
+
+    sigma.pop_back();
+  }
 }

@@ -3,7 +3,6 @@
 
 #include "dataTypes.hh"
 #include "Permutation.hh"
-#include <algorithm>
 #include <list>
 #include <vector>
 

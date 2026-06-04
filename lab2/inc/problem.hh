@@ -4,19 +4,21 @@
 #include "Permutation.hh"
 #include "solution.hh"
 #include "dataTypes.hh"
-#include <list>
 
 class Problem {
   Permutation p; 
   Solution s;
   int n;
   Instance &instance;
+  void bnb_recur(std::vector<int> &sigma, std::vector<int>& tasks, int &best_sol,
+                 std::vector<int> &best_perm);
 public:
   Problem(Instance &i, int num);
   int brute_force();
   int NEH();
   int FNEH();
   int johnson();
+  int branch_and_bound();
 };
 
 struct FNEHNode{

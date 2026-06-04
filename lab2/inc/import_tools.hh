@@ -2,7 +2,6 @@
 #define IMPORT_TOOLS_HH
 
 #include <sstream>
-#include <vector>
 #include "dataTypes.hh"
 
 bool importData(std::string &fileName, std::ostringstream &dest);
