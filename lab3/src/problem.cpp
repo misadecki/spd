@@ -4,6 +4,7 @@
 #include <iostream>
 #include <chrono>
 #include <cmath>
+#include <algorithm>
 
 using _clock_t = std::chrono::high_resolution_clock;
 
@@ -19,16 +20,19 @@ int Problem::PTAS_P2() {
 
   auto start = _clock_t::now();
   std::vector<int> sorted_tasks = instance.pj;
+  std::vector<int> load(instance.m);
   std::sort(sorted_tasks.begin(), sorted_tasks.end(), std::greater<>());
   int c_brute = 0, c_lsa = 0;
 
-  for (int j = sorted_tasks.size(); j > K_ptas; --j) {
+  for (int j = 0; j < K_ptas; ++j) {
     c_brute = brute_force_p2();
   }
 
-  for (int j = 0; j < K_ptas; ++j) {
-    c_lsa = LSA();
+  for (size_t j = K_ptas; j < sorted_tasks.size(); ++j) {
+    auto min_load = std::min_element(load.begin(), load.end());
+    *min_load += sorted_tasks[j];
   }
+
   int best_sol = c_brute + c_lsa;
   auto end = _clock_t::now();
 
