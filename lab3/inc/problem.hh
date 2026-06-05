@@ -10,15 +10,22 @@ class Problem {
   Solution s;
   int n;
   Instance &instance;
-  void bnb_recur(std::vector<int> &sigma, std::vector<int> &tasks, int &best_sol,
-                 std::vector<int> &best_perm);
+
+  int brute_p2();
+  int brute_p3();
+  int PD_P2();
+  int PD_P3();
+  int PTAS_P2();
+  int PTAS_P3();
+
 public:
   Problem(Instance &i, int num);
   int brute_force();
-  int NEH();
-  int FNEH(int print_result = 1);
-  int johnson();
-  int branch_and_bound();
+  int LSA();
+  int LPT();
+  int PD();
+  int PTAS();
+  int FPTAS();
 };
 
 #endif // PROBLEM_HH

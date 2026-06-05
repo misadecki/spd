@@ -7,16 +7,13 @@
 #include <vector>
 
 class Solution {
-  //int current_L = 0;
   Permutation &p;
   Instance &i;
-  std::vector<std::vector<int>> c;
+
 public:
   int solve();
-  int solve(std::list<int> &task_list);
   int solve(std::vector<int> &v);
-  int solve(std::vector<int> &v, int k);
-  Solution(Permutation &perm, Instance &instance) : p(perm), i(instance), c(instance.m + 1, std::vector<int>(instance.n+1, 0)){};
+  Solution(Permutation &perm, Instance &instance) : p(perm), i(instance) {};
 };
 
 #endif // SOLUTION_HH

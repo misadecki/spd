@@ -8,7 +8,7 @@
 
 int main(int argc, char *argv[]) {
     if(argc < 3){
-	    std::cout << "Usage: " << argv[0] << " <plik_testowy>" << " <brute|johnson|neh|fneh|bnb>"<< std::endl;
+	    std::cout << "Usage: " << argv[0] << " <plik_testowy>" << " <brute|LSA|LPT|PD|PTAS|FPTAS>"<< std::endl;
 	    return 0;
     }
     std::ostringstream dane;
@@ -20,14 +20,17 @@ int main(int argc, char *argv[]) {
 
     if (!strcmp(argv[2], "brute")) {
     	problem.brute_force();
-    } else if (!strcmp(argv[2], "johnson")) {
-    	problem.johnson();
-    } else if (!strcmp(argv[2], "neh")) {
-	problem.NEH();
-    } else if (!strcmp(argv[2], "fneh")) {
-   	problem.FNEH();
-    } else if (!strcmp(argv[2], "bnb")) {
-    	problem.branch_and_bound();
+    } else if (!strcmp(argv[2], "LSA")) {
+    	problem.LSA();
+    } else if (!strcmp(argv[2], "LPT")) {
+	problem.LPT();
+    } else if (!strcmp(argv[2], "PD")) {
+   	problem.PD();
+    } else if (!strcmp(argv[2], "PTAS")) {
+    	problem.PTAS();
+    }
+    } else if (!strcmp(argv[2], "FPTAS")) {
+    	problem.FPTAS();
     }
     std::cout << argv[1] << std::endl;
 
