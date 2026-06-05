@@ -3,38 +3,53 @@
 #include <climits>
 #include <iostream>
 #include <chrono>
+#include <cmath>
 
 using _clock_t = std::chrono::high_resolution_clock;
 
-Problem::Problem(Instance &i, int num) : p(num), s(p,i), instance(i){
+Problem::Problem(Instance &i, int num, int k_ptas, int k_fptas) : p(num), s(p,i), instance(i){
 	n = num;
+  K_ptas = k_ptas;
+  K_fptas = k_fptas;
 }
 
-int Problem::brute_p2(){
-  return 0;
+int Problem::PTAS_P2() {
+  if (instance.m != 2)
+    return -1;
+
+  auto start = _clock_t::now();
+  std::vector<int> sorted_tasks = instance.pj;
+  std::sort(sorted_tasks.begin(), sorted_tasks.end(), std::greater<>());
+  int c_brute = 0, c_lsa = 0;
+
+  for (int j = sorted_tasks.size(); j > K_ptas; --j) {
+    c_brute = brute_force_p2();
+  }
+
+  for (int j = 0; j < K_ptas; ++j) {
+    c_lsa = LSA();
+  }
+  int best_sol = c_brute + c_lsa;
+  auto end = _clock_t::now();
+
+  std::cout << best_sol << "\t";
+  std::cout << std::chrono::duration_cast<std::chrono::microseconds>(end -
+                                                           start).count() << "\t";
+  return best_sol;
 }
 
-int Problem::brute_p3(){
-  return 0;
+int Problem::FPTAS_P2() {
+  std::vector<int> red_pj(instance.n);
+
+  for (size_t j = 0; j < instance.pj.size(); ++j) {
+    red_pj[j] = std::floor(instance.pj[j] / K_fptas);
+  }
+
+  std::vector<int> new_idx = PD_P2(red_pj); //programowanie dynamiczne na
+  //wektorze zredukowanym, ma zwrócić wektor nowych indeksów
 }
 
-int Problem::PD_P2(){
-  return 0;
-}
-
-int Problem::PD_P3(){
-  return 0;
-}
-
-int Problem::PTAS_P2(){
-  return 0;
-}
-
-int Problem::PTAS_P3(){
-  return 0;
-}
-
-int Problem::brute_force() {
+int Problem::brute_force_p2() {
   auto start = _clock_t::now();
   int best_sol = INT_MAX;
   std::vector<int> best_perm;
@@ -60,15 +75,17 @@ int Problem::LSA() {
   auto start = _clock_t::now();
   std::vector<int> load(instance.m);
 
-  for (size_t i = 0; i < instance.pj.size(); ++i) {
+  for (size_t j = 0; j < instance.pj.size(); ++j) {
     auto min_load = std::min_element(load.begin(), load.end());
-    *min_load += instance.pj[i];
+    *min_load += instance.pj[j];
   }
-  
+
+  int best_sol = *std::max_element(load.begin(), load.end());
   auto end = _clock_t::now();
+  std::cout << best_sol << "\t";
   std::cout << std::chrono::duration_cast<std::chrono::microseconds>(end -
                                                            start).count() << "\t";
-  return *std::max_element(load.begin(), load.end());
+  return best_sol;
 }
 
 int Problem::LPT() {
@@ -77,41 +94,22 @@ int Problem::LPT() {
   std::vector<int> pj_sorted = instance.pj;
   std::sort(pj_sorted.begin(), pj_sorted.end(), std::greater<>());
 
-  for (size_t i = 0; i < pj_sorted.size(); ++i) {
+  for (size_t j = 0; j < pj_sorted.size(); ++j) {
     auto min_load = std::min_element(load.begin(), load.end());
-    *min_load += pj_sorted[i];
+    *min_load += pj_sorted[j];
   }
 
+  int best_sol = *std::max_element(load.begin(), load.end());
   auto end = _clock_t::now();
+  std::cout << best_sol << "\t";
   std::cout << std::chrono::duration_cast<std::chrono::microseconds>(end -
                                                            start).count() << "\t";
 
-  return *std::max_element(load.begin(), load.end());
+  return best_sol;
 }
 
-int Problem::PD(){
+int Problem::PD_P2(){
   if(instance.m == 2)
     return PD_P2();
-  else if(instance.m == 3)
-    return PD_P3();
-  else
-    return -1;
+  return -1;
 }
-
-int Problem::PTAS(){
-  if(instance.m == 2)
-    return PTAS_P2();
-  else if(instance.m == 3)
-    return PTAS_P3();
-  else
-    return -1;
-}
-
-int Problem::FPTAS(){
-  if(instance.m != 2)
-    return -1;
-
-  // Begin FPTAS algorithm
-  return 0;
-}
-

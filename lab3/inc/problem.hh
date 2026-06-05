@@ -10,22 +10,16 @@ class Problem {
   Solution s;
   int n;
   Instance &instance;
-
-  int brute_p2();
-  int brute_p3();
-  int PD_P2();
-  int PD_P3();
-  int PTAS_P2();
-  int PTAS_P3();
-
+  int K_ptas;
+  int K_fptas;
 public:
-  Problem(Instance &i, int num);
-  int brute_force();
+  Problem(Instance &i, int num, int k_ptas, int k_fptas);
+  int brute_force_p2();
   int LSA();
   int LPT();
-  int PD();
-  int PTAS();
-  int FPTAS();
+  int PD_P2();
+  int PTAS_P2();
+  int FPTAS_P2();
 };
 
 #endif // PROBLEM_HH
