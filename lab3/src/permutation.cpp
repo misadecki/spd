@@ -11,7 +11,7 @@ std::ostream &operator<<(std::ostream &stream, Permutation const &p){
 };
 
 bool Permutation::next_perm(){
-	for(int i=0; i<n; ++i){
+	for(int i=0; i<perm.size(); ++i){
 		if(perm[i] == 0){
 			perm[i] = 1;
 			return true;

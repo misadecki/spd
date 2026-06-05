@@ -9,9 +9,9 @@
 
 using _clock_t = std::chrono::high_resolution_clock;
 
-Problem::Problem(Instance &i, int num, int k_ptas, int k_fptas) : p(num), s(i), instance(i){
+Problem::Problem(Instance &i, int num, int k_ptas, int k_fptas) : p(num), s(p,i), instance(i){
   n = num;
-  if(n < K_ptas || n < K_fptas)
+  if(n < k_ptas || n < k_fptas)
     exit(EXIT_FAILURE);
   K_ptas = k_ptas;
   K_fptas = k_fptas;
@@ -28,7 +28,7 @@ int Problem::PTAS() {
   std::sort(sorted_tasks.begin(), sorted_tasks.end(), std::greater<>());
 
   p = Permutation(K_ptas); 
-  brute_force(sorted_tasks, K_ptas);
+  brute_force(sorted_tasks, K_ptas, 0);
   for (int j = 0; j < K_ptas; ++j) {
     load[p[j]] += sorted_tasks[j];
   }
@@ -41,7 +41,6 @@ int Problem::PTAS() {
   best_sol = *(std::max_element(load.begin(), load.end()));
 
   auto end = _clock_t::now();
-
   std::cout << best_sol << "\t";
   std::cout << std::chrono::duration_cast<std::chrono::microseconds>(end -
                                                            start).count() << "\t";
@@ -49,17 +48,22 @@ int Problem::PTAS() {
 }
 
 int Problem::FPTAS() {
+  auto start = _clock_t::now();
   std::vector<int> red_pj(instance.n);
 
   for (size_t j = 0; j < instance.pj.size(); ++j) {
     red_pj[j] = std::floor(instance.pj[j] / K_fptas);
   }
 
-  std::vector<int> new_idx = PD(red_pj); //programowanie dynamiczne na
-  //wektorze zredukowanym, ma zwrócić wektor nowych indeksów
+  int best_sol = PD(&red_pj, 0);
+  auto end = _clock_t::now();
+  std::cout << best_sol << "\t";
+  std::cout << std::chrono::duration_cast<std::chrono::microseconds>(end -
+                                                           start).count() << "\t";
+  return best_sol;
 }
 
-int Problem::brute_force(std::vector<int> &pj_vec, int j_tasks) {
+int Problem::brute_force(std::vector<int> &pj_vec, int j_tasks, int print_result) {
   auto start = _clock_t::now();
   int best_sol = INT_MAX;
   std::vector<int> best_perm;
@@ -74,9 +78,12 @@ int Problem::brute_force(std::vector<int> &pj_vec, int j_tasks) {
 
   p.perm = best_perm;
   auto end = _clock_t::now();
-  std::cout << best_sol << "\t";
-  std::cout << std::chrono::duration_cast<std::chrono::microseconds>(end -
+
+  if(print_result){
+    std::cout << best_sol << "\t";
+    std::cout << std::chrono::duration_cast<std::chrono::microseconds>(end -
                                                            start).count() << "\t";
+  }
 
   return best_sol;
 }
@@ -118,9 +125,45 @@ int Problem::LPT() {
   return best_sol;
 }
 
-int Problem::PD(){
+int Problem::PD(std::vector<int> *pj_vec, int print_result){
   if(instance.m != 2)
     return -1;
 
-  //...
+  if(pj_vec == nullptr)
+    pj_vec = &instance.pj;
+
+  auto start = _clock_t::now();
+  std::vector<int> m1(n), m2(0);
+  for(int j=0; j<n; ++j)
+    m1[j] = j;
+
+  int sum_pj = 0;
+  for(int pj : *pj_vec)
+    sum_pj += pj;
+  sum_pj = sum_pj/2 + 1;
+  std::vector<std::vector<int>> T(n + 1, std::vector<int>(sum_pj, 0));
+  
+  for(int j=1; j<=n; ++j)
+    for(int k=1; k<sum_pj; ++k)
+      if ((T[j-1][k]==1) || ((k>=(*pj_vec)[j-1]) && T[j-1][k-(*pj_vec)[j-1]]==1))
+        T[j][k]=1;
+
+  for(int k=sum_pj-1; k >= 0; ){
+    int j;
+    for(j=n; T[j-1][k] != 0; --j);
+    m2.push_back(j-1);
+    m1.erase(m1.begin()+j-1);
+    k -= (*pj_vec)[j-1];
+  }
+
+  int best_sol = std::max(s.solve(m1), s.solve(m2));
+  auto end = _clock_t::now();
+
+  if(print_result){
+    std::cout << best_sol << "\t";
+    std::cout << std::chrono::duration_cast<std::chrono::microseconds>(end -
+                                                           start).count() << "\t";
+  }
+
+  return best_sol;
 }

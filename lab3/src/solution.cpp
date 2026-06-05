@@ -9,7 +9,7 @@ int Solution::solve(std::vector<int> &pj_vec, int n_tasks) {
     c[j] = 0;
 
   for(int task_id=0; task_id < n_tasks; ++task_id)
-    c[p[task_id]] += pj_vec[task_id];
+    c[p.perm[task_id]] += pj_vec[task_id];
 
   for(int j=0; j<i.m; ++j){
     if(c[j] > c_max)

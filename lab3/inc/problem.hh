@@ -15,10 +15,10 @@ class Problem {
   int K_fptas;
 public:
   Problem(Instance &i, int num, int k_ptas, int k_fptas);
-  int brute_force(std::vector<int> &pj_vec, int j_tasks);
+  int brute_force(std::vector<int> &pj_vec, int j_tasks, int print_result = 1);
   int LSA();
   int LPT();
-  int PD();
+  int PD(std::vector<int> *pj_vec = nullptr, int print_result = 1);
   int PTAS();
   int FPTAS();
 };
