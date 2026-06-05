@@ -3,7 +3,6 @@
 
 #include "instance.hh"
 #include "permutation.hh"
-#include <list>
 #include <vector>
 
 class Solution {

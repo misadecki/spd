@@ -3,7 +3,6 @@
 #include <climits>
 #include <iostream>
 #include <chrono>
-#include <list>
 
 using _clock_t = std::chrono::high_resolution_clock;
 
@@ -57,12 +56,37 @@ int Problem::brute_force() {
   return best_sol;
 }
 
-int Problem::LSA(){
-  return 0;
+int Problem::LSA() {
+  auto start = _clock_t::now();
+  std::vector<int> load(instance.m);
+
+  for (size_t i = 0; i < instance.pj.size(); ++i) {
+    auto min_load = std::min_element(load.begin(), load.end());
+    *min_load += instance.pj[i];
+  }
+  
+  auto end = _clock_t::now();
+  std::cout << std::chrono::duration_cast<std::chrono::microseconds>(end -
+                                                           start).count() << "\t";
+  return *std::max_element(load.begin(), load.end());
 }
 
-int Problem::LPT(){
-  return 0;
+int Problem::LPT() {
+  auto start = _clock_t::now();
+  std::vector<int> load(instance.m);
+  std::vector<int> pj_sorted = instance.pj;
+  std::sort(pj_sorted.begin(), pj_sorted.end(), std::greater<>());
+
+  for (size_t i = 0; i < pj_sorted.size(); ++i) {
+    auto min_load = std::min_element(load.begin(), load.end());
+    *min_load += pj_sorted[i];
+  }
+
+  auto end = _clock_t::now();
+  std::cout << std::chrono::duration_cast<std::chrono::microseconds>(end -
+                                                           start).count() << "\t";
+
+  return *std::max_element(load.begin(), load.end());
 }
 
 int Problem::PD(){
@@ -88,5 +112,6 @@ int Problem::FPTAS(){
     return -1;
 
   // Begin FPTAS algorithm
+  return 0;
 }
 

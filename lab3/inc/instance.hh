@@ -2,8 +2,8 @@
 #define INSTANCE_HH
 
 #include <iostream>
-#include <string>
 #include <sstream>
+#include <vector>
 
 struct Instance {
   const int n;	// number of tasks

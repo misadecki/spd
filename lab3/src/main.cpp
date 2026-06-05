@@ -2,8 +2,6 @@
 #include "instance.hh"
 #include "problem.hh"
 #include <iostream>
-#include <sstream>
-#include <vector>
 #include <cstring>
 
 int main(int argc, char *argv[]) {
@@ -28,7 +26,6 @@ int main(int argc, char *argv[]) {
    	problem.PD();
     } else if (!strcmp(argv[2], "PTAS")) {
     	problem.PTAS();
-    }
     } else if (!strcmp(argv[2], "FPTAS")) {
     	problem.FPTAS();
     }
