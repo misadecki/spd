@@ -14,7 +14,7 @@ int main(int argc, char *argv[]) {
     importData(file, dane);
     Instance *i = parse_dataset(dane);
     //i->print();
-    Problem problem(*i, i->n, 2, 2);
+    Problem problem(*i, i->n, i->n*3/4, 2);
 
     if (!strcmp(argv[2], "brute")) {
     	problem.brute_force(i->pj, i->n);

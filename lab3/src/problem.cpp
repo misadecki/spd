@@ -143,14 +143,19 @@ int Problem::PD(std::vector<int> *pj_vec, int print_result){
   sum_pj = sum_pj/2 + 1;
   std::vector<std::vector<int>> T(n + 1, std::vector<int>(sum_pj, 0));
   
+  T[0][0] = 1;
   for(int j=1; j<=n; ++j)
-    for(int k=1; k<sum_pj; ++k)
+    for(int k=0; k<sum_pj; ++k)
       if ((T[j-1][k]==1) || ((k>=(*pj_vec)[j-1]) && T[j-1][k-(*pj_vec)[j-1]]==1))
         T[j][k]=1;
-
-  for(int k=sum_pj-1; k >= 0; ){
+  
+  int k = sum_pj - 1;
+  while (k > 0 && T[n][k] == 0) { k--; }
+  
+  for(;k >= 0;){
     int j;
-    for(j=n; T[j-1][k] != 0; --j);
+    for(j=n; j>0 && T[j-1][k] != 0; --j);
+    if(j==0) break;
     m2.push_back(j-1);
     m1.erase(m1.begin()+j-1);
     k -= (*pj_vec)[j-1];
