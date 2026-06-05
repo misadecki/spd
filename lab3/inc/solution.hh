@@ -11,6 +11,7 @@ class Solution {
 
 public:
   int solve();
+  int solve(std::vector<std::vector<int>> &v);
   int solve(std::vector<int> &v);
   Solution(Permutation &perm, Instance &instance) : p(perm), i(instance) {};
 };
