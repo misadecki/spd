@@ -14,10 +14,10 @@ int main(int argc, char *argv[]) {
     importData(file, dane);
     Instance *i = parse_dataset(dane);
     //i->print();
-    Problem problem(*i, i->n);
+    Problem problem(*i, i->n, 2, 2);
 
     if (!strcmp(argv[2], "brute")) {
-    	problem.brute_force();
+    	problem.brute_force(i->pj, i->n);
     } else if (!strcmp(argv[2], "LSA")) {
     	problem.LSA();
     } else if (!strcmp(argv[2], "LPT")) {

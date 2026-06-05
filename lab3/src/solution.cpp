@@ -2,18 +2,18 @@
 #include <climits>
 #include <list>
 
-int Solution::solve() {
+int Solution::solve(std::vector<int> &pj_vec, int n_tasks) {
   int c_max = 0;
   int *c = (int *)malloc(i.m * sizeof(int));
-  for(int i=0; i<i.m; ++i)
-    c[i] = 0;
+  for(int j=0; j<i.m; ++j)
+    c[j] = 0;
 
-  for(int task_id=0; task_id<i.n; ++task_id)
-    c[p[task_id]] += i[task_id];
+  for(int task_id=0; task_id < n_tasks; ++task_id)
+    c[p[task_id]] += pj_vec[task_id];
 
-  for(int i=0; i<i.m; ++i){
-    if(c[i] > c_max)
-      c_max = c[i];
+  for(int j=0; j<i.m; ++j){
+    if(c[j] > c_max)
+      c_max = c[j];
   }
 
   return c_max;

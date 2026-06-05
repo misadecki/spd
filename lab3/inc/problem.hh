@@ -4,6 +4,7 @@
 #include "permutation.hh"
 #include "solution.hh"
 #include "instance.hh"
+#include <vector>
 
 class Problem {
   Permutation p; 
@@ -14,12 +15,12 @@ class Problem {
   int K_fptas;
 public:
   Problem(Instance &i, int num, int k_ptas, int k_fptas);
-  int brute_force_p2();
+  int brute_force(std::vector<int> &pj_vec, int j_tasks);
   int LSA();
   int LPT();
-  int PD_P2();
-  int PTAS_P2();
-  int FPTAS_P2();
+  int PD();
+  int PTAS();
+  int FPTAS();
 };
 
 #endif // PROBLEM_HH

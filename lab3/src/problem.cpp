@@ -5,27 +5,32 @@
 #include <chrono>
 #include <cmath>
 #include <algorithm>
+#include <cstdlib>
 
 using _clock_t = std::chrono::high_resolution_clock;
 
-Problem::Problem(Instance &i, int num, int k_ptas, int k_fptas) : p(num), s(p,i), instance(i){
-	n = num;
+Problem::Problem(Instance &i, int num, int k_ptas, int k_fptas) : p(num), s(i), instance(i){
+  n = num;
+  if(n < K_ptas || n < K_fptas)
+    exit(EXIT_FAILURE);
   K_ptas = k_ptas;
   K_fptas = k_fptas;
 }
 
-int Problem::PTAS_P2() {
+int Problem::PTAS() {
   if (instance.m != 2)
     return -1;
 
   auto start = _clock_t::now();
+  int best_sol = 0;
   std::vector<int> sorted_tasks = instance.pj;
   std::vector<int> load(instance.m);
   std::sort(sorted_tasks.begin(), sorted_tasks.end(), std::greater<>());
-  int c_brute = 0, c_lsa = 0;
 
+  p = Permutation(K_ptas); 
+  brute_force(sorted_tasks, K_ptas);
   for (int j = 0; j < K_ptas; ++j) {
-    c_brute = brute_force_p2();
+    load[p[j]] += sorted_tasks[j];
   }
 
   for (size_t j = K_ptas; j < sorted_tasks.size(); ++j) {
@@ -33,7 +38,8 @@ int Problem::PTAS_P2() {
     *min_load += sorted_tasks[j];
   }
 
-  int best_sol = c_brute + c_lsa;
+  best_sol = *(std::max_element(load.begin(), load.end()));
+
   auto end = _clock_t::now();
 
   std::cout << best_sol << "\t";
@@ -42,24 +48,24 @@ int Problem::PTAS_P2() {
   return best_sol;
 }
 
-int Problem::FPTAS_P2() {
+int Problem::FPTAS() {
   std::vector<int> red_pj(instance.n);
 
   for (size_t j = 0; j < instance.pj.size(); ++j) {
     red_pj[j] = std::floor(instance.pj[j] / K_fptas);
   }
 
-  std::vector<int> new_idx = PD_P2(red_pj); //programowanie dynamiczne na
+  std::vector<int> new_idx = PD(red_pj); //programowanie dynamiczne na
   //wektorze zredukowanym, ma zwrócić wektor nowych indeksów
 }
 
-int Problem::brute_force_p2() {
+int Problem::brute_force(std::vector<int> &pj_vec, int j_tasks) {
   auto start = _clock_t::now();
   int best_sol = INT_MAX;
   std::vector<int> best_perm;
   int temp;
   do {
-	  temp = s.solve();
+	  temp = s.solve(pj_vec, j_tasks);
 	  if (temp < best_sol) {
 		  best_sol = temp;
 		  best_perm = p.perm;
@@ -112,8 +118,9 @@ int Problem::LPT() {
   return best_sol;
 }
 
-int Problem::PD_P2(){
-  if(instance.m == 2)
-    return PD_P2();
-  return -1;
+int Problem::PD(){
+  if(instance.m != 2)
+    return -1;
+
+  //...
 }
